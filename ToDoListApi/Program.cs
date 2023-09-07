@@ -1,9 +1,13 @@
 using Microsoft.EntityFrameworkCore;
 using ToDoListApi.Data;
 
+// https://learn.microsoft.com/en-us/aspnet/core/security/cors?view=aspnetcore-7.0
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddCors(s => s.AddDefaultPolicy(p => 
+    p.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin()    
+));
 var cs = builder.Configuration.GetConnectionString("ApplicationDbContext");
 builder.Services.AddDbContext<ApplicationDbContext>(o => o.UseSqlServer(cs));
 builder.Services.AddControllers();
@@ -21,6 +25,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors();
 
 app.UseAuthorization();
 
